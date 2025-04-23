@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: oci-queue-scaler
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: dummy #name of the deployment to be scaled
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  pollingInterval: 30
+  cooldownPeriod: 60
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-operated.metrics.svc.cluster.local:9090 # The address of the Prometheus server
+        metricName: queueLength
+        query: oci_queue_length
+        threshold: '2' # The threshold for scaling

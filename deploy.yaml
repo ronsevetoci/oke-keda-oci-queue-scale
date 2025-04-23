@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oci-queue-exporter
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oci-queue-exporter
+  template:
+    metadata:
+      labels:
+        app: oci-queue-exporter
+    spec:
+      serviceAccountName: services #The  name of the service account created and used in the IAM policy
+      automountServiceAccountToken: true
+      containers:
+        - name: scaler
+          image: <region>.ocir.io/<tenancy namespace>/imagename:imagetag
+          env:
+            - name: OCI_QUEUE_ID
+              value: "ocid1.queue...." # The OCID of the queue
+            - name: OCI_QUEUE_ENDPOINT
+              value: "https://cell-1.queue.messaging..." # The endpoint of the queue
+            - name: OCI_REGION
+              value: "eu-frankfurt-1" # The region of the queue
+            - name: EXPORTER_PORT
+              value: "8080"
+      imagePullSecrets:
+        - name: ocirsecret # The name of the secret created to pull the image from OCIR
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: oci-queue-exporter
+  labels:
+    app: oci-queue-exporter
+spec:
+  selector:
+    app: oci-queue-exporter
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
