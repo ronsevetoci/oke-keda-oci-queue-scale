@@ -15,3 +15,4 @@ We must have IAM policies in-place to allow our servicemonitor code to access th
 
 ### Architecture 
 
+![Architecture Diagram](./images/oke-oci-queue-keda.drawio.png)
