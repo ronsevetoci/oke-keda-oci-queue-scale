@@ -41,7 +41,9 @@ You can find a sample policy in [`IAM-Policy.txt`](./IAM-Policy.txt).
 
 The architecture below illustrates how metrics are collected from the OCI Queue and drive auto-scaling in the cluster:
 
-![Architecture Diagram](./images/oke-oci-queue-keda.drawio.png)
+<div align="center">
+  <img src="./assets/oke-keda-oci-queue-scale.drawio.png" alt="Architecture" width="800"/>
+</div>
 
 ---
 
