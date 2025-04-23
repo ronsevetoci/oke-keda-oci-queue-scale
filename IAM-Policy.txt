@@ -1,0 +1,3 @@
+### Example policy for allowing Service account "services" in namespace "default" in cluster OCID "ocid1.cluster..." to read messages from all queues in the tenanacy.
+# We could further limit the service account to a specific queue
+Allow any-user to read queues in tenancy where all {request.principal.type = 'workload', request.principal.namespace = 'default', request.principal.service_account = 'services', request.principal.cluster_id = 'ocid1.cluster...'}
