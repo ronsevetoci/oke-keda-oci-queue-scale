@@ -58,7 +58,89 @@ The architecture below illustrates how metrics are collected from the OCI Queue 
 
 ## 🚀 Usage
 
-_Coming soon: deployment steps, Helm templates, and `kubectl` instructions to deploy this stack easily._
+## 🚀 Deployment Steps
+
+This section outlines how to deploy the event-driven autoscaling solution using OCI Queue, Prometheus, and KEDA on OKE.
+
+### ✅ Prerequisites
+
+Make sure the following are ready:
+
+- An operational **OKE (Oracle Kubernetes Engine)** cluster.
+- An **OCI Queue** created and ready to receive messages.
+- **IAM Policies** allowing access to OCI Queue and related resources.
+- **Prometheus** installed on your OKE cluster (for metrics collection).
+- **KEDA** installed on your OKE cluster (for event-driven scaling).
+
+> ℹ️ [Install KEDA guide](https://keda.sh/docs/2.14/concepts/scaling-deployments/)
+
+---
+
+### 📦 Deployment Steps
+
+1. **Clone this repository**:
+
+    ```bash
+    git clone https://github.com/ronsevetoci/oke-keda-oci-queue-scale.git
+    cd oke-keda-oci-queue-scale
+    ```
+
+2. **Update environment configurations**:
+
+    - Edit `deploy.yaml`:
+      - Replace the placeholders with your OCI Queue **OCID** and **Region**.
+      - Adjust any other environment variables as needed.
+
+3. **Deploy the application**:
+
+    ```bash
+    kubectl apply -f deploy.yaml
+    ```
+
+4. **Deploy the KEDA ScaledObject**:
+
+    ```bash
+    kubectl apply -f scaledObject.yaml
+    ```
+
+    > Ensure the `scaledObject.yaml` references the correct queue metrics and scaling parameters.
+
+5. **Deploy the Prometheus ServiceMonitor**:
+
+    ```bash
+    kubectl apply -f servicemonitor.yaml
+    ```
+
+    > This will allow Prometheus to scrape metrics from the application.
+
+---
+
+### 🧪 Testing the Setup
+
+1. **Send test messages to the queue**:
+
+    You can add messages to the queue directly from the UI, CLI or via SDK.
+   
+3. **Monitor autoscaling behavior**:
+
+    Watch the pod scaling:
+
+    ```bash
+    kubectl get pods -w
+    ```
+
+    As messages increase in the queue, KEDA should trigger new pod creation. When the queue is drained, the pods should scale back down.
+
+---
+
+### 🧹 Cleanup
+
+To remove all deployed resources:
+
+```bash
+kubectl delete -f servicemonitor.yaml
+kubectl delete -f scaledObject.yaml
+kubectl delete -f deploy.yaml
 
 ---
 
