@@ -1,0 +1,21 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: queue-metrics-scaler
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: dig-poc # <<< Replace with the app you want to scale
+  minReplicaCount: 0
+  maxReplicaCount: 10000
+  pollingInterval: 1    # Optional: how often to poll metrics (seconds)
+  cooldownPeriod: 30    # Optional: time to wait before scaling down (seconds)
+  
+  triggers:
+    - type: metrics-api
+      metadata:
+        format: "prometheus"  # Optional: format of the metrics returned
+        url: "http://oci-queue-exporter.default.svc.cluster.local:8080"
+        targetValue: "10"  # When queueLength > 10, scale out
+        valueLocation: "oci_queue_length"  # Default; first metric returned
+        activationTargetValue: "1"
