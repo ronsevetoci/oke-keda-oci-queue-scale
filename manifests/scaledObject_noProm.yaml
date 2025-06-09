@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   scaleTargetRef:
-    name: dig-poc # <<< Replace with the app you want to scale
+    name: dummy # <<< Replace with the app you want to scale
   minReplicaCount: 0
   maxReplicaCount: 10000
   pollingInterval: 1    # Optional: how often to poll metrics (seconds)
