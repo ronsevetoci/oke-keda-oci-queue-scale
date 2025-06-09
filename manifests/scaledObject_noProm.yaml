@@ -16,6 +16,6 @@ spec:
       metadata:
         format: "prometheus"  # Optional: format of the metrics returned
         url: "http://oci-queue-exporter.default.svc.cluster.local:8080"
-        targetValue: "10"  # When queueLength > 10, scale out
+        targetValue: "2"  # When queueLength > 10, scale out
         valueLocation: "oci_queue_length"  # Default; first metric returned
         activationTargetValue: "1"
