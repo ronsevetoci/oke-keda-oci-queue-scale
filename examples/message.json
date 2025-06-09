@@ -1,0 +1,9 @@
+[
+  {
+    "content": "SGVsbG8gZnJvbSBPQ0kgQ0xJIQ==",
+    "deliveryPolicy": {
+      "delayInSeconds": 0,
+      "timeToLiveInSeconds": 60
+    }
+  }
+]
