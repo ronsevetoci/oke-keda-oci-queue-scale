@@ -17,7 +17,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: scaler
-          image: <region>.ocir.io/<tenancy namespace>/imagename:imagetag
+          image: ghcr.io/ronsevetoci/oci-queue-exporter:v1.0.0
           env:
             - name: OCI_QUEUE_ID
               value: "ocid1.queue...." # The OCID of the queue
@@ -27,8 +27,6 @@ spec:
               value: "eu-frankfurt-1" # The region of the queue
             - name: EXPORTER_PORT
               value: "8080"
-      imagePullSecrets:
-        - name: ocirsecret # The name of the secret created to pull the image from OCIR
 ---
 
 apiVersion: v1

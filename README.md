@@ -10,6 +10,7 @@ Optional -
 - 📊 **Prometheus** for custom metrics collection
 
 The deployment will automatically scale based on the **number of messages in an OCI Queue**, enabling dynamic handling of load.
+You can choose wheter or not to use Prometheus to gather the metric and use a Prometheus Keda scaled object which will digest the metric from Prometheus or; digest the metric directly from a Keda scaledobject from the exporter service without relying on Prometheus - i have set up two different scaledObjects manifests for this end. 
 
 ---
 
@@ -24,7 +25,7 @@ Make sure you have the following ready before deploying:
 
 Optional - If using Prometheus - 
 
-5. ✅ [Prometheus Helm Chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus) installed  
+5. ✅ [Prometheus Helm Chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus) installed
 
 ---
 
@@ -92,30 +93,34 @@ Make sure the following are ready:
 
 2. **Update environment configurations**:
 
-    - Edit `deploy.yaml`:
+    - Edit `manifests/deploy.yaml`:
       - Replace the placeholders with your OCI Queue **OCID** and **Region**.
       
 3. **Deploy the application**:
 
     ```bash
-    kubectl apply -f deploy.yaml
+    kubectl apply -f manifests/deploy.yaml
     ```
 
-4. **Deploy the KEDA ScaledObject**:
-
-    ```bash
-    kubectl apply -f scaledObject.yaml
-    ```
-
-    > Ensure the `scaledObject.yaml` references the correct queue metrics and scaling parameters.
-
-5. **Deploy the Prometheus ServiceMonitor**:
+5. Optional(when using Prometheus to digest the metric) - **Deploy the Prometheus ServiceMonitor**:
 
     ```bash
     kubectl apply -f servicemonitor.yaml
     ```
 
     > This will allow Prometheus to scrape metrics from the application.
+
+
+4. **Deploy the KEDA ScaledObject**:
+
+    When using Prometheus -
+    ```bash
+    kubectl apply -f manifests/scaledObject.yaml
+    ```
+    When digesting directly from KEDA without Prometheus - 
+    ```bash
+    kubectl apply -f manifests/scaledObject_noProm.yaml
+    ```
 
 ---
 
@@ -142,9 +147,9 @@ Make sure the following are ready:
 To remove all deployed resources:
 
 ```bash
-kubectl delete -f servicemonitor.yaml
-kubectl delete -f scaledObject.yaml
-kubectl delete -f deploy.yaml
+kubectl delete -f manifests/servicemonitor.yaml
+kubectl delete -f manifests/scaledObject.yaml
+kubectl delete -f manifests/deploy.yaml
 
 ---
 
