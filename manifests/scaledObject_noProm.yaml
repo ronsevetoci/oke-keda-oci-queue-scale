@@ -7,9 +7,9 @@ spec:
   scaleTargetRef:
     name: dummy # <<< Replace with the app you want to scale
   minReplicaCount: 0
-  maxReplicaCount: 10000
-  pollingInterval: 1    # Optional: how often to poll metrics (seconds)
-  cooldownPeriod: 30    # Optional: time to wait before scaling down (seconds)
+  maxReplicaCount: 10
+  pollingInterval: 30    # Optional: how often to poll metrics (seconds)
+  cooldownPeriod: 60    # Optional: time to wait before scaling down (seconds)
   
   triggers:
     - type: metrics-api
