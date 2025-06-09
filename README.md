@@ -119,18 +119,22 @@ This section outlines how to deploy the event-driven autoscaling solution using 
 
 1. **Deploy dummy application-**
 
-    Our scaledObjects are set to scale a Kubernetes deployment called "dummy" (examples/dummy-deploy.yaml), it a simple echo server which will be used for the purpose of testing that our scaling actually works and that more replicas of the Deployment are actually created as we exceed our scaledObject message threshold of 2 messages.
+    Our scaledObjects are set to scale a Kubernetes deployment called "dummy" (manifests/dummy-deploy.yaml.yaml), it a simple echo server which will be used for the purpose of testing that our scaling actually works and that more replicas of the Deployment are actually created as we exceed our scaledObject message threshold of 2 messages.
 
      ```bash
-    kubectl apply -f examples/dummy-deploy.yaml
+    kubectl apply -f manifests/dummy-deploy.yaml.yaml
     ```
 
 2. **Send test messages to the queue**:
 
-    You can add messages to the queue directly from the UI(OCI Console), CLI or via SDK, i've added a message example (examples/message.json) for testing purposes, you can use it via OCI CLI like so: (your CLI session must be authenticated to your OCI tenancy)
+    You can add messages to the queue directly from the UI(OCI Console), CLI or via SDK, you can use it via OCI CLI like so: (your CLI session must be authenticated to your OCI tenancy)
 
     ```bash
-    oci queue message put --queue-id <your-queue-ocid> --messages file://examples/message.json --endpoint <your-queue-endpoint>
+    oci queue message put \
+  --queue-id <your-queue-ocid> \
+  --messages '[{"content": "eyJoZWxsbyI6IndvcmxkIn0="}]' \
+  --endpoint <your-queue-endpoint>
+
     ```
 
     The current config in the scaledObject is (manifests/scaledObject*.yaml) - 
