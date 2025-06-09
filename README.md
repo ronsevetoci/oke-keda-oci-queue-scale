@@ -10,6 +10,7 @@ Optional -
 - 📊 **Prometheus** for custom metrics collection
 
 The deployment will automatically scale based on the **number of messages in an OCI Queue**, enabling dynamic handling of load.
+
 You can choose wheter or not to use Prometheus to gather the metric and use a Prometheus Keda scaled object which will digest the metric from Prometheus or; digest the metric directly from a Keda scaledobject from the exporter service without relying on Prometheus - i have set up two different scaledObjects manifests for this end. 
 
 ---
