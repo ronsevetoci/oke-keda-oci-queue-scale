@@ -127,29 +127,29 @@ This section outlines how to deploy the event-driven autoscaling solution using 
 
 2. **Send test messages to the queue**:
 
-    You can add messages to the queue directly from the UI, CLI or via SDK, i've added a message example (examples/message.json) for testing purposes, you can use it via OCI CLI like so: (your CLI session must be authenticated to your OCI tenancy)
-        oci queue message put \
-    --queue-id <your-queue-ocid> \
-    --messages file://message.json \
-    --endpoint <your-queue-endpoint>
+    You can add messages to the queue directly from the UI(OCI Console), CLI or via SDK, i've added a message example (examples/message.json) for testing purposes, you can use it via OCI CLI like so: (your CLI session must be authenticated to your OCI tenancy)
 
-    You can also simply put messages in the queue via console.
-   
-3. **Monitor autoscaling behavior**:
-    
+    ```bash
+    oci queue message put --queue-id <your-queue-ocid> --messages file://examples/message.json --endpoint <your-queue-endpoint>
+    ```
+
     The current config in the scaledObject is (manifests/scaledObject*.yaml) - 
     If the queue length (the amount of messages in the OCI queue we reffered the exporter to check) is 0, the deployment will scale down to 0.
     If the queue length is 1, the deployment will stay at 0.
     Once it reaches 1, the app activates (min 1 replica).
     When it exceeds 2, scaling up begins toward max 10.
 
+    To start scaling process run put =>2 messages to the queue.
+   
+3. **Monitor autoscaling behavior**:
+
     Watch the pod scaling:
 
     ```bash
-    kubectl get pods -w
+    kubectl get deployment dummy -w
     ```
 
-    As messages increase in the queue, KEDA should trigger new pod creation. When the queue is drained, the pods should scale back down.
+    As messages increase in the queue, KEDA should trigger new pod creation which will be presented as the replicas in the deployment begin to scale. When the queue is drained, the pods should scale back down.
 
 ---
 
