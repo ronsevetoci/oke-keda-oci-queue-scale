@@ -3,9 +3,11 @@
 This project demonstrates how to build an **event-driven auto-scaling solution** using:
 
 - 📬 **OCI Queue** for workload queuing  
-- 📊 **Prometheus** for custom metrics collection  
 - ⚖️ **KEDA (Kubernetes Event-Driven Autoscaler)** for horizontal pod autoscaling (HPA)  
 - 🚀 **OKE (Oracle Kubernetes Engine)** as the Kubernetes platform
+
+Optional - 
+- 📊 **Prometheus** for custom metrics collection
 
 The deployment will automatically scale based on the **number of messages in an OCI Queue**, enabling dynamic handling of load.
 
@@ -16,10 +18,13 @@ The deployment will automatically scale based on the **number of messages in an 
 Make sure you have the following ready before deploying:
 
 1. ✅ An [OKE Cluster](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm) up and running  
-2. ✅ [Prometheus Helm Chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus) installed  
-3. ✅ [KEDA installed](https://keda.sh/docs/2.9/deploy/#install) in the cluster  
-4. ✅ An [OCI Queue](https://docs.oracle.com/en-us/iaas/Content/queue/queue-create.htm) configured  
-5. ✅ Proper OCI IAM Policies in place (see [`IAM-Policy.txt`](./IAM-Policy.txt))
+2. ✅ [KEDA installed](https://keda.sh/docs/2.9/deploy/#install) in the cluster  
+3. ✅ An [OCI Queue](https://docs.oracle.com/en-us/iaas/Content/queue/queue-create.htm) configured  
+4. ✅ Proper OCI IAM Policies in place (see [`IAM-Policy.txt`](./IAM-Policy.txt))
+
+Optional - If using Prometheus - 
+
+5. ✅ [Prometheus Helm Chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus) installed  
 
 ---
 
@@ -27,9 +32,9 @@ Make sure you have the following ready before deploying:
 
 To allow your app (and the Prometheus exporter) to access the OCI Queue securely, this example uses:
 
+- **Granular IAM permissions**
 - **OCI Workload Identity**  
 - **Kubernetes service account bindings**  
-- **Granular IAM permissions**
 
 This approach avoids using broad access keys and provides safer, fine-grained access.
 
@@ -48,7 +53,7 @@ The architecture below illustrates how metrics are collected from the OCI Queue 
 
 | Component            | Description                                                                 |
 |----------------------|-----------------------------------------------------------------------------|
-| `App.py`             | Python Prometheus exporter that pulls message stats from OCI Queue          |
+| `exporter.py`        | Python Prometheus exporter that pulls message stats from OCI Queue          |
 | `ServiceMonitor`     | Scrapes the exporter metrics for Prometheus                                 |
 | `Prometheus`         | In-cluster monitoring, collects metrics and exposes them to KEDA            |
 | `KEDA`               | Reads queue length metrics and adjusts replicas accordingly (via HPA)       |
@@ -60,7 +65,7 @@ The architecture below illustrates how metrics are collected from the OCI Queue 
 
 ## 🚀 Deployment Steps
 
-This section outlines how to deploy the event-driven autoscaling solution using OCI Queue, Prometheus, and KEDA on OKE.
+This section outlines how to deploy the event-driven autoscaling solution using OCI Queue, Prometheus(optional), and KEDA on OKE.
 
 ### ✅ Prerequisites
 
@@ -69,7 +74,7 @@ Make sure the following are ready:
 - An operational **OKE (Oracle Kubernetes Engine)** cluster.
 - An **OCI Queue** created and ready to receive messages.
 - **IAM Policies** allowing access to OCI Queue and related resources.
-- **Prometheus** installed on your OKE cluster (for metrics collection).
+- (Optional) **Prometheus** installed on your OKE cluster (for metrics collection).
 - **KEDA** installed on your OKE cluster (for event-driven scaling).
 
 > ℹ️ [Install KEDA guide](https://keda.sh/docs/2.14/concepts/scaling-deployments/)
@@ -89,8 +94,7 @@ Make sure the following are ready:
 
     - Edit `deploy.yaml`:
       - Replace the placeholders with your OCI Queue **OCID** and **Region**.
-      - Adjust any other environment variables as needed.
-
+      
 3. **Deploy the application**:
 
     ```bash
