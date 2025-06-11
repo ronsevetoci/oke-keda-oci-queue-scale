@@ -96,7 +96,7 @@ This section outlines how to deploy the event-driven autoscaling solution using 
 5. **Optional(when using Prometheus to digest the metric) Deploy the Prometheus ServiceMonitor**:
 
     ```bash
-    kubectl apply -f servicemonitor.yaml
+    kubectl apply -f manifests/servicemonitor.yaml
     ```
 
     > This will allow Prometheus to scrape metrics from the application and expose them to KEDA.
