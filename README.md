@@ -130,11 +130,7 @@ This section outlines how to deploy the event-driven autoscaling solution using 
     You can add messages to the queue directly from the UI(OCI Console), CLI or via SDK, you can use it via OCI CLI like so: (your CLI session must be authenticated to your OCI tenancy)
 
     ```bash
-    oci queue message put \
-  --queue-id <your-queue-ocid> \
-  --messages '[{"content": "eyJoZWxsbyI6IndvcmxkIn0="}]' \
-  --endpoint <your-queue-endpoint>
-
+    oci queue message put --queue-id <your-queue-ocid> --messages '[{"content": "eyJoZWxsbyI6IndvcmxkIn0="}]' --endpoint <your-queue-endpoint>
     ```
 
     The current config in the scaledObject is (manifests/scaledObject*.yaml) - 
