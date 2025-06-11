@@ -17,12 +17,12 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: scaler
-          image: ghcr.io/ronsevetoci/oci-queue-exporter:v1.0.0
+          image: ghcr.io/ronsevetoci/oci-queue-exporter:v1.0.1
           env:
             - name: OCI_QUEUE_ID
-              value: "ocid1.queue...." # The OCID of the queue
+              value: "ocid1.queue.oc1.eu-frankfurt-1..." # The OCID of the queue
             - name: OCI_QUEUE_ENDPOINT
-              value: "https://cell-1.queue.messaging..." # The endpoint of the queue
+              value: "https://cell-1.queue.messaging.eu-frankfurt-1.oci.oraclecloud.com" # The endpoint of the queue, this one is for the queue in the Frankfurt region
             - name: OCI_REGION
               value: "eu-frankfurt-1" # The region of the queue
             - name: EXPORTER_PORT
